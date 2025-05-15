@@ -10,6 +10,7 @@ let palette = [
 
 let seeds = [];
 let scaleFactorX, scaleFactorY;
+let rectSeed;
 
 function setup() {
   createCanvas(windowWidth, windowHeight, WEBGL);
@@ -26,63 +27,102 @@ function setup() {
   brush.field("seabed");
 
   for (let i = 0; i < 150; i++) seeds.push(random());
+
+  // Set fixed seed for rectangle
+  rectSeed = random(10000);
 }
 
 function generatePolygon(c1, c2, c3, t) {
+  const yVariation = random(-15, 30); // Add random vertical variation
   return [
     [
       c1[0] + 2 * cos(360 * sin(random(0, 360) + t * 120)),
-      c1[1] + 2 * sin(random(0, 360) + t * 120),
+      c1[1] + 2 * sin(random(0, 360) + t * 120) + yVariation,
     ],
     [
       c2[0] + 10 * cos(360 * sin(random(0, 360) + t * 120)),
-      c2[1] + 10 * sin(random(0, 360) + t * 120),
+      c2[1] + 10 * sin(random(0, 360) + t * 120) + yVariation,
     ],
     [
       c3[0] + 2 * cos(360 * sin(random(0, 360) + t * 120)),
-      c3[1] + 2 * sin(random(0, 360) + t * 120),
+      c3[1] + 2 * sin(random(0, 360) + t * 120) + yVariation,
     ],
+  ];
+}
+
+function generateRect(x, y, width, height) {
+  return [
+    [x - width / 2, y - height / 2],
+    [x + width / 2, y - height / 2],
+    [x + width / 2, y + height / 2],
+    [x - width / 2, y + height / 2],
   ];
 }
 
 function draw() {
-  const t = frameCount / 30;
+  const t = frameCount / 10;
 
-  background("#1B2A4A"); // Dark blue background
+  // Always draw background first
+  background("#1B2A4A");
 
-  const X_OFFSET = -400; // Controls the overall horizontal position
-  const triangle_config = [
-    [-6, -20],
-    [25, -7],
-    [0, 14],
-  ];
+  // Draw rectangle with fixed random seed
+  const rectWidth = 200;
+  const rectHeight = 100;
 
-  for (let i = 0; i < 30; i++) {
-    const multiplier = 30;
-    const waveAmplitude = 50; // Controls the height of the wave
-    const waveFrequency = 0.2; // Controls how many waves appear
-    const yOffset = sin(i * 360 * waveFrequency + t * 2) * waveAmplitude;
+  // clouds
+  push();
+  randomSeed(rectSeed);
+  brush.noField(); // Disable flowfield for rectangle
+  brush.fill("#4ad6af", 60);
+  brush.bleed(0.5);
+  brush.noStroke();
 
+  brush.rect(-width * 0.3, -400, rectWidth, rectHeight);
+  brush.rect(width * 0.2, -400, rectWidth, rectHeight);
+  brush.rect(width * 0.4, -200, rectWidth, rectHeight);
+  brush.rect(width * 0.1, 200, rectWidth, rectHeight);
+
+  brush.rect(-width * 0.6, 200, rectWidth, rectHeight);
+
+  brush.noFill();
+  brush.field("seabed"); // Re-enable flowfield for other elements
+  pop();
+
+  // Reset randomSeed for other elements
+  randomSeed();
+
+  const multiplier = 40;
+  // top flock
+  for (let i = 0; i < 10; i++) {
     randomSeed(33213 * seeds[i]);
-    brush.set("hatch_brush", "#E8B4B8", 2); // Light earthy pink
+    brush.set("hatch_brush", "#ffffff", 0);
 
-    brush.setHatch("marker", "#D4A5A8", 1); // Darker earthy pink
+    brush.setHatch("marker", "#ffffff", 1.5);
     brush.hatch(10, 130, 0.8);
 
     brush.polygon(
       generatePolygon(
-        [
-          triangle_config[0][0] + i * multiplier + X_OFFSET,
-          triangle_config[0][1] + yOffset,
-        ],
-        [
-          triangle_config[1][0] + i * multiplier + X_OFFSET,
-          triangle_config[1][1] + yOffset,
-        ],
-        [
-          triangle_config[2][0] + i * multiplier + X_OFFSET,
-          triangle_config[2][1] + yOffset,
-        ],
+        [-206 + i * multiplier, -20 - (i * multiplier) / 2],
+        [-175 + i * multiplier, -7 - (i * multiplier) / 2],
+        [-200 + i * multiplier, 14 - (i * multiplier) / 2],
+        t
+      )
+    );
+  }
+
+  // bottom flock
+  for (let i = 1; i < 12; i++) {
+    randomSeed(33213 * seeds[i]);
+    brush.set("hatch_brush", "#ffffff", 0);
+
+    brush.setHatch("marker", "#ffffff", 1.5);
+    brush.hatch(10, 130, 0.8);
+
+    brush.polygon(
+      generatePolygon(
+        [-206 + i * multiplier, -20 + (i * multiplier) / 2],
+        [-175 + i * multiplier, -7 + (i * multiplier) / 2],
+        [-200 + i * multiplier, 14 + (i * multiplier) / 2],
         t
       )
     );
