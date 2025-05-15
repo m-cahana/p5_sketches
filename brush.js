@@ -14,7 +14,7 @@ let scaleFactorX, scaleFactorY;
 function setup() {
   createCanvas(windowWidth, windowHeight, WEBGL);
   angleMode(DEGREES);
-  background("#fffceb");
+  background("#ffffff");
 
   // Calculate scale factors based on a reference size of 1000x1000
   scaleFactorX = windowWidth / 1000;
@@ -29,42 +29,65 @@ function setup() {
   for (let i = 0; i < 150; i++) seeds.push(random());
 }
 
+function generatePolygon(c1, c2, c3, t) {
+  return [
+    [
+      c1[0] + 2 * cos(360 * sin(random(0, 360) + t * 120)),
+      c1[1] + 2 * sin(random(0, 360) + t * 120),
+    ],
+    [
+      c2[0] + 10 * cos(360 * sin(random(0, 360) + t * 120)),
+      c2[1] + 10 * sin(random(0, 360) + t * 120),
+    ],
+    [
+      c3[0] + 2 * cos(360 * sin(random(0, 360) + t * 120)),
+      c3[1] + 2 * sin(random(0, 360) + t * 120),
+    ],
+  ];
+}
+
 function draw() {
   const t = frameCount / 30;
 
   background("#ffe6d4");
 
-  // Remember in WEBGL mode, (0,0) is at the center
-  // We'll adjust all coordinates to be relative to center
-  const centerX = 0;
-  const centerY = 0;
+  for (let i = 0; i < 10; i++) {
+    const multiplier = 30;
 
-  randomSeed(33213 * seeds[56]);
-  brush.set("cpencil", "#003c32", 1);
+    randomSeed(33213 * seeds[i]);
+    brush.set("hatch_brush", "#003c32", 1);
 
-  randomSeed(33213 * seeds[35]);
+    brush.setHatch("marker", "#e0b411", 1.1);
+    brush.hatch(10, 130, 0.8);
 
-  randomSeed(33213 * seeds[75]);
+    brush.polygon(
+      generatePolygon(
+        [-6 + i * multiplier, -20 - (i * multiplier) / 2],
+        [25 + i * multiplier, -7 - (i * multiplier) / 2],
+        [0 + i * multiplier, 14 - (i * multiplier) / 2],
+        t
+      )
+    );
+  }
 
-  brush.setHatch("marker", "#e0b411", 1.1);
-  brush.hatch(10, 130, 0.2);
-  brush.polygon([
-    [
-      (250 - 300) * scaleFactorX +
-        20 * cos(360 * sin(random(0, 360) + t * 120)),
-      (250 - 300) * scaleFactorY + 20 * sin(random(0, 360) + t * 120),
-    ],
-    [
-      (500 - 300) * scaleFactorX +
-        40 * cos(360 * sin(random(0, 360) + t * 120)),
-      (300 - 300) * scaleFactorY + 50 * sin(random(0, 360) + t * 120),
-    ],
-    [
-      (300 - 300) * scaleFactorX +
-        10 * cos(360 * sin(random(0, 360) + t * 120)),
-      (520 - 300) * scaleFactorY + 30 * sin(random(0, 360) + t * 120),
-    ],
-  ]);
+  for (let i = 1; i < 10; i++) {
+    const multiplier = 30;
+
+    randomSeed(33213 * seeds[i]);
+    brush.set("hatch_brush", "#003c32", 1);
+
+    brush.setHatch("marker", "#e0b411", 1.1);
+    brush.hatch(10, 130, 0.8);
+
+    brush.polygon(
+      generatePolygon(
+        [-6 + i * multiplier, -20 + (i * multiplier) / 2],
+        [25 + i * multiplier, -7 + (i * multiplier) / 2],
+        [0 + i * multiplier, 14 + (i * multiplier) / 2],
+        t
+      )
+    );
+  }
 
   push();
   noStroke();
