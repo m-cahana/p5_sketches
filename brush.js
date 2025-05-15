@@ -98,6 +98,7 @@ function draw() {
   randomSeed();
 
   const multiplier = 40;
+  const xOffset = 0;
   // top flock
   for (let i = 0; i < 10; i++) {
     randomSeed(33213 * seeds[i]);
@@ -108,9 +109,9 @@ function draw() {
 
     brush.polygon(
       generatePolygon(
-        [-206 + i * multiplier, -20 - (i * multiplier) / 2],
-        [-175 + i * multiplier, -7 - (i * multiplier) / 2],
-        [-200 + i * multiplier, 14 - (i * multiplier) / 2],
+        [-206 + i * multiplier + xOffset, -20 - (i * multiplier) / 2],
+        [-175 + i * multiplier + xOffset, -7 - (i * multiplier) / 2],
+        [-200 + i * multiplier + xOffset, 14 - (i * multiplier) / 2],
         t
       )
     );
@@ -126,9 +127,9 @@ function draw() {
 
     brush.polygon(
       generatePolygon(
-        [-206 + i * multiplier, -20 + (i * multiplier) / 2],
-        [-175 + i * multiplier, -7 + (i * multiplier) / 2],
-        [-200 + i * multiplier, 14 + (i * multiplier) / 2],
+        [-206 + i * multiplier + xOffset, -20 + (i * multiplier) / 2],
+        [-175 + i * multiplier + xOffset, -7 + (i * multiplier) / 2],
+        [-200 + i * multiplier + xOffset, 14 + (i * multiplier) / 2],
         t
       )
     );
