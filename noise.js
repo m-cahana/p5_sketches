@@ -10,8 +10,9 @@ let offset = 0;
 let svgImages = []; // Array to hold all SVG sequences
 let currentImageIndex = 0;
 let lastChangeTime = 0;
-const CHANGE_INTERVAL = 500; // milliseconds
-const TOGGLE_INTERVAL = 500; // milliseconds for toggling between final states
+const INITIAL_CHANGE_INTERVAL = 250; // milliseconds for initial animations
+const FAST_CHANGE_INTERVAL = 150; // milliseconds starting from "hello"
+const TOGGLE_INTERVAL = 150; // milliseconds for toggling between final states
 let svgMask;
 let ALPHA_THRESHOLD = 100; // Only count as intersection if alpha is above this value
 const SIZE_MULTIPLIER = 2; // Multiplier for dots that intersect with SVG
@@ -80,8 +81,17 @@ function draw() {
   let currentTime = millis();
 
   if (!inToggleMode) {
+    // Index of the basic "hello.svg" (without extra o's)
+    const HELLO_INDEX = 5; // This corresponds to the "hello.svg" in the preload array
+
+    // Determine which interval to use based on current position
+    const currentInterval =
+      currentImageIndex >= HELLO_INDEX
+        ? FAST_CHANGE_INTERVAL
+        : INITIAL_CHANGE_INTERVAL;
+
     // Progress through the sequence until we reach the toggle phase
-    if (currentTime - lastChangeTime >= CHANGE_INTERVAL) {
+    if (currentTime - lastChangeTime >= currentInterval) {
       currentImageIndex++;
       if (currentImageIndex >= svgImages.length - 2) {
         // Switch to toggle mode when we reach the final two states
