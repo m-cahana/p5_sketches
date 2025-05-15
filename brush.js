@@ -13,6 +13,12 @@ let scaleFactorX, scaleFactorY;
 let rectSeed;
 
 function setup() {
+  // Hide the loading screen manually
+  const loadingElement = document.getElementById("p5_loading");
+  if (loadingElement) {
+    loadingElement.style.display = "none";
+  }
+
   createCanvas(windowWidth, windowHeight, WEBGL);
   angleMode(DEGREES);
 
