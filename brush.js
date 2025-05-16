@@ -9,12 +9,13 @@ function setup() {
     loadingElement.style.display = "none";
   }
 
-  createCanvas(windowWidth, windowHeight, WEBGL);
+  // Set canvas to full window size
+  createCanvas(window.innerWidth, window.innerHeight, WEBGL);
   angleMode(DEGREES);
 
   // Calculate scale factors based on a reference size of 1000x1000
-  scaleFactorX = windowWidth / 1000;
-  scaleFactorY = windowHeight / 1000;
+  scaleFactorX = window.innerWidth / 1000;
+  scaleFactorY = window.innerHeight / 1000;
 
   // Scale brushes to adapt to canvas size
   brush.scaleBrushes(min(scaleFactorX, scaleFactorY) * 1.5);
@@ -134,8 +135,8 @@ function draw() {
 }
 
 function windowResized() {
-  resizeCanvas(windowWidth, windowHeight);
-  scaleFactorX = windowWidth / 1000;
-  scaleFactorY = windowHeight / 1000;
+  resizeCanvas(window.innerWidth, window.innerHeight);
+  scaleFactorX = window.innerWidth / 1000;
+  scaleFactorY = window.innerHeight / 1000;
   brush.scaleBrushes(min(scaleFactorX, scaleFactorY) * 1.5);
 }

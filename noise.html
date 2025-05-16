@@ -3,30 +3,35 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>p5.js Brush Sketch</title>
+    <title>p5.js Noise Sketch</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.8.0/p5.js"></script>
-    <script src="libraries/p5.brush.min.js"></script>
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
     <div id="p5_loading">Loading...</div>
-    <script src="brush.js"></script>
+    <script src="noise.js"></script>
     <div class="nav-dots">
       <div class="nav-dot" onclick="window.location.href='index.html'"></div>
       <div
         class="nav-dot active"
-        onclick="window.location.href='brush.html'"
+        onclick="window.location.href='noise.html'"
       ></div>
+      <div class="nav-dot" onclick="window.location.href='spline.html'"></div>
     </div>
     <script>
       document.addEventListener("click", function (event) {
+        // Check if click was on a nav dot
+        if (event.target.classList.contains("nav-dot")) {
+          return; // Let the onclick handler of the dot handle navigation
+        }
+
         const windowWidth = window.innerWidth;
         const clickX = event.clientX;
 
         if (clickX < windowWidth / 2) {
           window.location.href = "index.html";
         } else {
-          // Already on rightmost page, do nothing
+          window.location.href = "spline.html";
         }
       });
     </script>
