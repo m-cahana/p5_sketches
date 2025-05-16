@@ -4,7 +4,7 @@ let rectSeed;
 
 // Define default viewport size
 const DEFAULT_WIDTH = 1440;
-const DEFAULT_HEIGHT = 650;
+const DEFAULT_HEIGHT = 500;
 
 // Helper function to scale coordinates
 function scaleCoord(x, y) {
@@ -23,6 +23,7 @@ function setup() {
   // Set canvas to full window size
   createCanvas(window.innerWidth, window.innerHeight, WEBGL);
   angleMode(DEGREES);
+  frameRate(100); // Set frame rate
 
   // Calculate scale factors based on default viewport size
   scaleFactorX = window.innerWidth / DEFAULT_WIDTH;
