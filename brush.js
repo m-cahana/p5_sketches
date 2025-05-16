@@ -14,6 +14,13 @@ function scaleCoord(x, y) {
 }
 
 function setup() {
+  // Set viewport meta tag to prevent scaling and scrolling
+  const meta = document.createElement("meta");
+  meta.name = "viewport";
+  meta.content =
+    "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no";
+  document.head.appendChild(meta);
+
   // Hide the loading screen manually
   const loadingElement = document.getElementById("p5_loading");
   if (loadingElement) {
