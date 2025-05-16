@@ -1,13 +1,3 @@
-// We define our palette
-let palette = [
-  "#2c695a",
-  "#4ad6af",
-  "#7facc6",
-  "#4e93cc",
-  "#f6684f",
-  "#ffd300",
-];
-
 let seeds = [];
 let scaleFactorX, scaleFactorY;
 let rectSeed;
