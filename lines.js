@@ -1,4 +1,4 @@
-let scaleFactorX, scaleFactorY;
+let scaleFactor;
 let frameCount = 0;
 let isBlinking = false;
 let blinkTimer = 0;
@@ -17,50 +17,48 @@ function setup() {
   angleMode(DEGREES);
   frameRate(10);
 
-  // Calculate scale factors based on a reference size of 1000x1000
-  scaleFactorX = windowWidth / 1000;
-  scaleFactorY = windowHeight / 1000;
+  // Calculate scale factor based on the average of width and height
+  // Original sketch was designed for roughly 1000x1000
+  scaleFactor = (windowWidth + windowHeight) / 2000;
 }
 
 function drawLash(x, y, rotation) {
   push();
-  translate(x, y);
+  translate(x * scaleFactor, y * scaleFactor);
   rotate(rotation);
-  arc(0, 0, 20, 20, 160, 200);
+  arc(0, 0, 20 * scaleFactor, 20 * scaleFactor, 160, 200);
   pop();
 }
 
 function drawEyeLashes(centerX, isLeftEye) {
   const numLashes = 10;
-  const eyelidX = centerX; // The eyelid is drawn at the same X as the eye center
-  const startX = eyelidX + (isLeftEye ? -25 : 30);
-  const endX = eyelidX + (isLeftEye ? -125 : 140);
+  const eyelidX = centerX * scaleFactor;
+  const startX = eyelidX + (isLeftEye ? -25 : 30) * scaleFactor;
+  const endX = eyelidX + (isLeftEye ? -125 : 140) * scaleFactor;
   const step = (endX - startX) / (numLashes - 1);
-  const leftBaseY = -58; // Starting Y position at eyelid level
-  const rightBaseY = -50; // Starting Y position at eyelid level
-  const blinkOffset = isBlinking ? 15 : 0; // Add offset when blinking
+  const leftBaseY = -58 * scaleFactor;
+  const rightBaseY = -50 * scaleFactor;
+  const blinkOffset = isBlinking ? 15 * scaleFactor : 0;
 
   for (let i = 0; i < numLashes; i++) {
     const x = startX + i * step;
     const y =
       (isLeftEye ? leftBaseY : rightBaseY) +
-      (i < 3 || i > 7 ? 2 : 1) +
-      (i < 2 || i > 8 ? 1 : 0) +
-      blinkOffset; // Add blink offset to Y position
-    const rotation = isLeftEye
-      ? -30 // Left eye rotations
-      : 30; // Right eye rotations
-    drawLash(x, y, rotation);
+      (i < 3 || i > 7 ? 2 : 1) * scaleFactor +
+      (i < 2 || i > 8 ? 1 : 0) * scaleFactor +
+      blinkOffset;
+    const rotation = isLeftEye ? -30 : 30;
+    drawLash(x / scaleFactor, y / scaleFactor, rotation);
   }
 }
 
 function drawSpiral(x, y, size, rotations, spiralIndex) {
   push();
-  translate(x, y);
-  rotate(spiralRotation + spiralOffsets[spiralIndex]); // Add individual offset
+  translate(x * scaleFactor, y * scaleFactor);
+  rotate(spiralRotation + spiralOffsets[spiralIndex]);
   beginShape();
   for (let i = 0; i < rotations * 360; i += 2) {
-    let radius = (i / 360) * size;
+    let radius = (i / 360) * size * scaleFactor;
     let angle = i;
     let x1 = cos(angle) * radius;
     let y1 = sin(angle) * radius;
@@ -71,9 +69,9 @@ function drawSpiral(x, y, size, rotations, spiralIndex) {
 }
 
 function draw() {
-  background("#FFE4C4"); // Lighter peach color (bisque)
+  background("#FFE4C4");
   stroke(0);
-  strokeWeight(2);
+  strokeWeight(2 * scaleFactor);
   noFill();
 
   // Update spiral rotation
@@ -83,13 +81,11 @@ function draw() {
   if (frameCount > 40) {
     if (blinkTimer === 0) {
       if (isBlinking) {
-        // If we were blinking, schedule next blink
-        nextBlinkTime = frameCount + floor(random(20, 70)); // Random time between 2-7 seconds
+        nextBlinkTime = frameCount + floor(random(20, 70));
         isBlinking = false;
       } else if (frameCount >= nextBlinkTime) {
-        // Time to blink
         isBlinking = true;
-        blinkTimer = 10; // Blink for 10 frames
+        blinkTimer = 10;
       }
     }
     if (isBlinking) {
@@ -99,7 +95,6 @@ function draw() {
 
   // Draw spirals first
   if (frameCount >= 1) {
-    // Left side spirals
     drawSpiral(-400, -200, 20, 3, 0);
   }
 
@@ -112,7 +107,6 @@ function draw() {
   }
 
   if (frameCount >= 4) {
-    // Right side spirals
     drawSpiral(400, -200, 20, 3, 3);
   }
 
@@ -126,163 +120,317 @@ function draw() {
 
   // Draw features based on frameCount
   if (frameCount >= 7) {
-    // Left vertical line
-    line(-250, -150, -250, 100);
+    line(
+      -250 * scaleFactor,
+      -150 * scaleFactor,
+      -250 * scaleFactor,
+      100 * scaleFactor
+    );
   }
 
   if (frameCount >= 8) {
-    // Right vertical line
-    line(250, -150, 250, 100);
+    line(
+      250 * scaleFactor,
+      -150 * scaleFactor,
+      250 * scaleFactor,
+      100 * scaleFactor
+    );
   }
 
   if (frameCount >= 9) {
-    // Top arc
-    arc(0, -150, 500, 100, 180, 0);
+    arc(0, -150 * scaleFactor, 500 * scaleFactor, 100 * scaleFactor, 180, 0);
   }
 
   if (frameCount >= 10) {
-    // Bottom arc
-    arc(0, 100, 500, 175, 0, 180);
+    arc(0, 100 * scaleFactor, 500 * scaleFactor, 175 * scaleFactor, 0, 180);
   }
 
   if (frameCount >= 11) {
-    // Left eye top arc
     if (!isBlinking) {
-      arc(-100, -40, 120, 45, 180, 0);
+      arc(
+        -100 * scaleFactor,
+        -40 * scaleFactor,
+        120 * scaleFactor,
+        45 * scaleFactor,
+        180,
+        0
+      );
     }
   }
 
   if (frameCount >= 12) {
-    // Left eye bottom arc
     if (!isBlinking) {
-      arc(-100, -40, 120, 45, 0, 180);
+      arc(
+        -100 * scaleFactor,
+        -40 * scaleFactor,
+        120 * scaleFactor,
+        45 * scaleFactor,
+        0,
+        180
+      );
     }
   }
 
   if (frameCount >= 13) {
-    // Left eye top lid
     if (!isBlinking) {
-      arc(-100, -40, 120, 20, 180, 0);
+      arc(
+        -100 * scaleFactor,
+        -40 * scaleFactor,
+        120 * scaleFactor,
+        20 * scaleFactor,
+        180,
+        0
+      );
     } else {
-      arc(-100, -40, 120, 5, 180, 0); // Blinking state
+      arc(
+        -100 * scaleFactor,
+        -40 * scaleFactor,
+        120 * scaleFactor,
+        5 * scaleFactor,
+        180,
+        0
+      );
     }
   }
 
   if (frameCount >= 14) {
-    // Left eye lashes
     drawEyeLashes(-25, true);
   }
 
   if (frameCount >= 15) {
-    // Left eye arc and interior
     if (!isBlinking) {
-      arc(-100, -50, 40, 30, 0, 180);
+      arc(
+        -100 * scaleFactor,
+        -50 * scaleFactor,
+        40 * scaleFactor,
+        30 * scaleFactor,
+        0,
+        180
+      );
       fill(0);
-      arc(-100, -45, 25, 10, 0, 360);
+      arc(
+        -100 * scaleFactor,
+        -45 * scaleFactor,
+        25 * scaleFactor,
+        10 * scaleFactor,
+        0,
+        360
+      );
       noFill();
     }
   }
 
   if (frameCount >= 16) {
-    // Right eye top arc
     if (!isBlinking) {
-      arc(100, -40, 120, 45, 180, 0);
+      arc(
+        100 * scaleFactor,
+        -40 * scaleFactor,
+        120 * scaleFactor,
+        45 * scaleFactor,
+        180,
+        0
+      );
     }
   }
 
   if (frameCount >= 17) {
-    // Right eye bottom arc
     if (!isBlinking) {
-      arc(100, -40, 120, 45, 0, 180);
+      arc(
+        100 * scaleFactor,
+        -40 * scaleFactor,
+        120 * scaleFactor,
+        45 * scaleFactor,
+        0,
+        180
+      );
     }
   }
 
   if (frameCount >= 18) {
-    // Right eye top lid
     if (!isBlinking) {
-      arc(100, -40, 120, 20, 180, 0);
+      arc(
+        100 * scaleFactor,
+        -40 * scaleFactor,
+        120 * scaleFactor,
+        20 * scaleFactor,
+        180,
+        0
+      );
     } else {
-      arc(100, -40, 120, 5, 180, 0); // Blinking state
+      arc(
+        100 * scaleFactor,
+        -40 * scaleFactor,
+        120 * scaleFactor,
+        5 * scaleFactor,
+        180,
+        0
+      );
     }
   }
 
   if (frameCount >= 19) {
-    // Right eye lashes
     drawEyeLashes(25, false);
   }
 
   if (frameCount >= 20) {
-    // Right eye arc and interior
     if (!isBlinking) {
-      arc(100, -50, 40, 30, 0, 180);
+      arc(
+        100 * scaleFactor,
+        -50 * scaleFactor,
+        40 * scaleFactor,
+        30 * scaleFactor,
+        0,
+        180
+      );
       fill(0);
-      arc(100, -45, 25, 10, 0, 360);
+      arc(
+        100 * scaleFactor,
+        -45 * scaleFactor,
+        25 * scaleFactor,
+        10 * scaleFactor,
+        0,
+        360
+      );
       noFill();
     }
   }
 
   if (frameCount >= 21) {
-    // Nose
     push();
-    translate(0, 20);
+    translate(0, 20 * scaleFactor);
     rotate(15);
-    line(0, -20, 0, 20);
+    line(0, -20 * scaleFactor, 0, 20 * scaleFactor);
     pop();
   }
 
   if (frameCount >= 22) {
-    // Upper lip - left arc
-    arc(-33, 100, 66, 16.5, 180, 0);
+    arc(
+      -33 * scaleFactor,
+      100 * scaleFactor,
+      66 * scaleFactor,
+      16.5 * scaleFactor,
+      180,
+      0
+    );
   }
 
   if (frameCount >= 23) {
-    // Upper lip - right arc
-    arc(33, 100, 66, 16.5, 180, 0);
+    arc(
+      33 * scaleFactor,
+      100 * scaleFactor,
+      66 * scaleFactor,
+      16.5 * scaleFactor,
+      180,
+      0
+    );
   }
 
   if (frameCount >= 24) {
-    // Bottom lip
-    arc(0, 100, 132, 33, 0, 180);
+    arc(0, 100 * scaleFactor, 132 * scaleFactor, 33 * scaleFactor, 0, 180);
   }
 
   if (frameCount >= 25) {
-    // First hair strand
-    bezier(0, -200, 350, -220, 275, -160, 190, 55);
+    bezier(
+      0,
+      -200 * scaleFactor,
+      350 * scaleFactor,
+      -220 * scaleFactor,
+      275 * scaleFactor,
+      -160 * scaleFactor,
+      190 * scaleFactor,
+      55 * scaleFactor
+    );
   }
 
   if (frameCount >= 26) {
-    // Second hair strand
-    bezier(-50, -210, 370, -230, 275, -170, 225, 75);
+    bezier(
+      -50 * scaleFactor,
+      -210 * scaleFactor,
+      370 * scaleFactor,
+      -230 * scaleFactor,
+      275 * scaleFactor,
+      -170 * scaleFactor,
+      225 * scaleFactor,
+      75 * scaleFactor
+    );
   }
 
   if (frameCount >= 27) {
-    // Third hair strand
-    bezier(-110, -210, 370, -240, 275, -180, 240, 95);
+    bezier(
+      -110 * scaleFactor,
+      -210 * scaleFactor,
+      370 * scaleFactor,
+      -240 * scaleFactor,
+      275 * scaleFactor,
+      -180 * scaleFactor,
+      240 * scaleFactor,
+      95 * scaleFactor
+    );
   }
 
   if (frameCount >= 28) {
-    // Fourth hair strand
-    bezier(-225, -190, 370, -240, 275, -180, 260, 105);
+    bezier(
+      -225 * scaleFactor,
+      -190 * scaleFactor,
+      370 * scaleFactor,
+      -240 * scaleFactor,
+      275 * scaleFactor,
+      -180 * scaleFactor,
+      260 * scaleFactor,
+      105 * scaleFactor
+    );
   }
 
   if (frameCount >= 29) {
-    // Fourth hair strand (left side)
-    bezier(0, -200, -350, -220, -275, -160, -190, 55);
+    bezier(
+      0,
+      -200 * scaleFactor,
+      -350 * scaleFactor,
+      -220 * scaleFactor,
+      -275 * scaleFactor,
+      -160 * scaleFactor,
+      -190 * scaleFactor,
+      55 * scaleFactor
+    );
   }
 
   if (frameCount >= 30) {
-    // Fifth hair strand (left side)
-    bezier(100, -200, -370, -230, -275, -200, -220, 75);
+    bezier(
+      100 * scaleFactor,
+      -200 * scaleFactor,
+      -370 * scaleFactor,
+      -230 * scaleFactor,
+      -275 * scaleFactor,
+      -200 * scaleFactor,
+      -220 * scaleFactor,
+      75 * scaleFactor
+    );
   }
 
   if (frameCount >= 31) {
-    // Sixth hair strand (left side)
-    bezier(150, -200, -370, -240, -275, -180, -240, 95);
+    bezier(
+      150 * scaleFactor,
+      -200 * scaleFactor,
+      -370 * scaleFactor,
+      -240 * scaleFactor,
+      -275 * scaleFactor,
+      -180 * scaleFactor,
+      -240 * scaleFactor,
+      95 * scaleFactor
+    );
   }
 
   if (frameCount >= 32) {
-    // Seventh hair strand (left side)
-    bezier(225, -190, -370, -230, -275, -200, -275, 115);
+    bezier(
+      225 * scaleFactor,
+      -190 * scaleFactor,
+      -370 * scaleFactor,
+      -230 * scaleFactor,
+      -275 * scaleFactor,
+      -200 * scaleFactor,
+      -275 * scaleFactor,
+      115 * scaleFactor
+    );
   }
 
   frameCount++;
@@ -290,8 +438,7 @@ function draw() {
 
 function windowResized() {
   resizeCanvas(windowWidth, windowHeight);
-  scaleFactorX = windowWidth / 1000;
-  scaleFactorY = windowHeight / 1000;
+  scaleFactor = (windowWidth + windowHeight) / 2000;
 }
 
 function mouseMoved() {
