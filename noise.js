@@ -10,9 +10,9 @@ let offset = 0;
 let svgImages = []; // Array to hold all SVG sequences
 let currentImageIndex = 0;
 let lastChangeTime = 0;
-const INITIAL_CHANGE_INTERVAL = 250; // milliseconds for initial animations
-const FAST_CHANGE_INTERVAL = 150; // milliseconds starting from "hello"
-const TOGGLE_INTERVAL = 150; // milliseconds for toggling between final states
+const INITIAL_CHANGE_INTERVAL = 200; // milliseconds for initial animations
+const FAST_CHANGE_INTERVAL = 125; // milliseconds starting from "hello"
+const TOGGLE_INTERVAL = 125; // milliseconds for toggling between final states
 let svgMask;
 let ALPHA_THRESHOLD = 100; // Only count as intersection if alpha is above this value
 const SIZE_MULTIPLIER = 2; // Multiplier for dots that intersect with SVG
@@ -162,51 +162,15 @@ function dotGrid() {
       let noiseValue = noise((x + offset) * xScale, (y + offset) * yScale);
       let baseSize = noiseValue * gap;
 
-      // Create a circular pattern of points to check
-      let points = [];
-      const numPoints = 8; // Number of points to check around the circle
-      const radius = baseSize / 2; // Radius of the circle
+      // Only check center point for intersection
+      let pixelColor = svgMask.get(x, y);
 
-      // Add center point
-      points.push({ x: x, y: y });
-
-      // Add points in a circular pattern
-      for (let i = 0; i < numPoints; i++) {
-        let angle = (i / numPoints) * TWO_PI;
-        points.push({
-          x: x + cos(angle) * radius,
-          y: y + sin(angle) * radius,
-        });
-      }
-
-      // Count intersections with a more precise threshold
-      let intersectionCount = 0;
-      for (let point of points) {
-        let pixelColor = svgMask.get(point.x, point.y);
-        if (pixelColor[3] > ALPHA_THRESHOLD) {
-          intersectionCount++;
-        }
-      }
-
-      // Require at least 3 points to intersect to consider it a true intersection
-      const MIN_INTERSECTIONS = 3;
-
-      // If no significant intersection, draw normal circle
-      if (intersectionCount < MIN_INTERSECTIONS) {
-        circle(x, y, baseSize);
-      } else if (intersectionCount === points.length) {
-        // Full intersection - draw larger circle
+      if (pixelColor[3] > ALPHA_THRESHOLD) {
+        // If intersecting, draw larger circle
         circle(x, y, baseSize * SIZE_MULTIPLIER);
       } else {
-        // Partial intersection - draw irregular shape
-        for (let point of points) {
-          let pixelColor = svgMask.get(point.x, point.y);
-          let size =
-            pixelColor[3] > ALPHA_THRESHOLD
-              ? baseSize * SIZE_MULTIPLIER
-              : baseSize;
-          circle(point.x, point.y, size);
-        }
+        // If not intersecting, draw normal circle
+        circle(x, y, baseSize);
       }
     }
   }
