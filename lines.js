@@ -232,17 +232,17 @@ function draw() {
 
   if (frameCount >= 22) {
     // Upper lip - left arc
-    arc(-30, 100, 60, 15, 180, 0);
+    arc(-33, 100, 66, 16.5, 180, 0);
   }
 
   if (frameCount >= 23) {
     // Upper lip - right arc
-    arc(30, 100, 60, 15, 180, 0);
+    arc(33, 100, 66, 16.5, 180, 0);
   }
 
   if (frameCount >= 24) {
     // Bottom lip
-    arc(0, 100, 120, 30, 0, 180);
+    arc(0, 100, 132, 33, 0, 180);
   }
 
   if (frameCount >= 25) {
