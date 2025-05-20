@@ -261,23 +261,28 @@ function draw() {
   }
 
   if (frameCount >= 28) {
+    // Fourth hair strand
+    bezier(-225, -190, 370, -240, 275, -180, 260, 105);
+  }
+
+  if (frameCount >= 29) {
     // Fourth hair strand (left side)
     bezier(0, -200, -350, -220, -275, -160, -190, 55);
   }
 
-  if (frameCount >= 29) {
-    // Fifth hair strand (left side)
-    bezier(50, -200, -370, -230, -275, -200, -220, 75);
-  }
-
   if (frameCount >= 30) {
-    // Sixth hair strand (left side)
-    bezier(100, -200, -370, -240, -275, -180, -240, 95);
+    // Fifth hair strand (left side)
+    bezier(100, -200, -370, -230, -275, -200, -220, 75);
   }
 
   if (frameCount >= 31) {
+    // Sixth hair strand (left side)
+    bezier(150, -200, -370, -240, -275, -180, -240, 95);
+  }
+
+  if (frameCount >= 32) {
     // Seventh hair strand (left side)
-    bezier(150, -200, -370, -230, -275, -200, -275, 115);
+    bezier(225, -190, -370, -230, -275, -200, -275, 115);
   }
 
   frameCount++;
