@@ -3,6 +3,8 @@ let frameCount = 0;
 let isBlinking = false;
 let blinkTimer = 0;
 let nextBlinkTime = 0;
+let spiralRotation = 0;
+let spiralOffsets = [0, 60, 120, 180, 240, 300]; // Different starting rotations for each spiral
 
 function setup() {
   // Hide the loading screen manually
@@ -52,9 +54,10 @@ function drawEyeLashes(centerX, isLeftEye) {
   }
 }
 
-function drawSpiral(x, y, size, rotations) {
+function drawSpiral(x, y, size, rotations, spiralIndex) {
   push();
   translate(x, y);
+  rotate(spiralRotation + spiralOffsets[spiralIndex]); // Add individual offset
   beginShape();
   for (let i = 0; i < rotations * 360; i += 2) {
     let radius = (i / 360) * size;
@@ -72,6 +75,9 @@ function draw() {
   stroke(0);
   strokeWeight(2);
   noFill();
+
+  // Update spiral rotation
+  spiralRotation += 30;
 
   // Handle blinking after frame 40
   if (frameCount > 40) {
@@ -94,28 +100,28 @@ function draw() {
   // Draw spirals first
   if (frameCount >= 1) {
     // Left side spirals
-    drawSpiral(-400, -200, 20, 3);
+    drawSpiral(-400, -200, 20, 3, 0);
   }
 
   if (frameCount >= 2) {
-    drawSpiral(-400, 0, 20, 3);
+    drawSpiral(-400, 0, 20, 3, 1);
   }
 
   if (frameCount >= 3) {
-    drawSpiral(-400, 200, 20, 3);
+    drawSpiral(-400, 200, 20, 3, 2);
   }
 
   if (frameCount >= 4) {
     // Right side spirals
-    drawSpiral(400, -200, 20, 3);
+    drawSpiral(400, -200, 20, 3, 3);
   }
 
   if (frameCount >= 5) {
-    drawSpiral(400, 0, 20, 3);
+    drawSpiral(400, 0, 20, 3, 4);
   }
 
   if (frameCount >= 6) {
-    drawSpiral(400, 200, 20, 3);
+    drawSpiral(400, 200, 20, 3, 5);
   }
 
   // Draw features based on frameCount
