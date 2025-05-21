@@ -19,7 +19,11 @@ function setup() {
 
   // Calculate scale factor based on the average of width and height
   // Original sketch was designed for roughly 1000x1000
+  // Add extra scaling for narrow windows
   scaleFactor = (windowWidth + windowHeight) / 2000;
+  if (windowWidth < 500) {
+    scaleFactor *= 0.6; // Reduce scale by 40% for narrow windows
+  }
 }
 
 function drawLash(x, y, rotation) {
@@ -439,6 +443,9 @@ function draw() {
 function windowResized() {
   resizeCanvas(windowWidth, windowHeight);
   scaleFactor = (windowWidth + windowHeight) / 2000;
+  if (windowWidth < 500) {
+    scaleFactor *= 0.6; // Reduce scale by 40% for narrow windows
+  }
 }
 
 function mouseMoved() {
