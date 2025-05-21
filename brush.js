@@ -3,7 +3,7 @@ let scaleFactorX, scaleFactorY;
 let rectSeed;
 
 // Define default viewport size
-const DEFAULT_WIDTH = 1440;
+const DEFAULT_WIDTH = 1400;
 const DEFAULT_HEIGHT = 500;
 
 // Helper function to scale coordinates
@@ -121,6 +121,7 @@ function draw() {
     brush.set("hatch_brush", "#ffffff", 0);
 
     const scale = min(scaleFactorX, scaleFactorY);
+    console.log(scale);
     brush.setHatch("marker", "#ffffff", scale < 1 ? (1.5 / scale) * 2 : 1.5);
     brush.hatch(10, 130, 0.8);
 
