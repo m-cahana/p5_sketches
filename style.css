@@ -102,7 +102,10 @@ h1 {
   padding: 10px;
   background-color: rgba(150, 150, 150, 0.25);
   border-radius: 20px;
-  z-index: 1000; /* Add z-index to ensure it appears above the canvas */
+  z-index: 9999; /* Increased z-index */
+  -webkit-transform: translateX(-50%); /* Safari support */
+  -webkit-backface-visibility: hidden; /* Prevent rendering issues */
+  backface-visibility: hidden;
 }
 
 .nav-dot {
@@ -112,6 +115,7 @@ h1 {
   background-color: #999;
   cursor: pointer;
   transition: background-color 0.3s;
+  -webkit-tap-highlight-color: transparent; /* Remove tap highlight on mobile */
 }
 
 .nav-dot.active {
